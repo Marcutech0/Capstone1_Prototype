@@ -33,7 +33,7 @@ https://marketplace.visualstudio.com/items?itemName=MerryYellow.uca-lite-vscode
 
 
 Restrictions:
-* Unity 2020.2 and newer.
+* Unity 2021.2 and newer.
 * Visual Studio 2022 or VS Code (1.75+). Does not work with Visual Studio for Mac, Rider or any other IDE or text editor.
 
 

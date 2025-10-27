@@ -545,6 +545,11 @@ namespace Meryel.UnityCodeAssist.Editor
                 );
         }
 
+        public void SendShaderGlobalKeywords()
+        {
+            SendStringArrayAux(Synchronizer.Model.Ids.ShaderGlobalKeywords, Shader.globalKeywords.Select(k => k.name).ToArray());
+        }
+
         public void SendGameObject(GameObject go)
         {
             if (!go)
@@ -577,7 +582,10 @@ namespace Meryel.UnityCodeAssist.Editor
             var dataOfComponentAnimation = go.ToSyncModelOfComponentAnimation();
             if (dataOfComponentAnimation != null)
                 SendAux(dataOfComponentAnimation);
-            
+
+            var dataOfComponentMaterial = go.ToSyncModelOfComponentMaterial();
+            if (dataOfComponentMaterial != null)
+                SendAux(dataOfComponentMaterial);
         }
 
         public void SendScriptableObject(ScriptableObject so)
@@ -773,6 +781,11 @@ namespace Meryel.UnityCodeAssist.Editor
         void Synchronizer.Model.IProcessor.Process(Synchronizer.Model.Component_Animation component_Animation)
         {
             Serilog.Log.Warning("Unity/Server shouldn't call Synchronizer.Model.IProcessor.Process(Synchronizer.Model.Component_Animation)");
+        }
+
+        void Synchronizer.Model.IProcessor.Process(Synchronizer.Model.Component_Material component_Material)
+        {
+            Serilog.Log.Warning("Unity/Server shouldn't call Synchronizer.Model.IProcessor.Process(Synchronizer.Model.Component_Material)");
         }
 
         void Synchronizer.Model.IProcessor.Process(Synchronizer.Model.RequestScript requestScript)

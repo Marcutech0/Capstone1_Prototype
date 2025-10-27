@@ -302,21 +302,25 @@ namespace Meryel.UnityCodeAssist.Editor
             {
                 Preferences.PreferenceMonitor.InstanceOfPlayerPrefs.Bump();
             }
-            else if(category == "EditorPrefs")
+            else if (category == "EditorPrefs")
             {
                 Preferences.PreferenceMonitor.InstanceOfEditorPrefs.Bump();
             }
-            else if(category == "InputManager")
+            else if (category == "InputManager")
             {
                 Input.InputManagerMonitor.Instance.Bump();
             }
-            else if(category == "AnimationHuman")
+            else if (category == "AnimationHuman")
             {
                 MQTTnetInitializer.Publisher?.SendComponentHumanTrait(HumanTrait.BoneName, HumanTrait.MuscleName);
             }
             else if (category == "Scene")
             {
                 OnSceneListChanged();
+            }
+            else if (category == "ShaderGlobalKeywords")
+            {
+                MQTTnetInitializer.Publisher?.SendShaderGlobalKeywords();
             }
             else
             {

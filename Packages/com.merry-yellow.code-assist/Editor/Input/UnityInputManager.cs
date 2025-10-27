@@ -98,7 +98,8 @@ namespace Meryel.UnityCodeAssist.Editor.Input
 
             //var reader = new StreamReader(yamlPath);
             var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
-                .WithTagMapping("tag:unity3d.com,2011:13", typeof(Class13Mapper))
+                //.WithTagMapping("tag:unity3d.com,2011:13", typeof(Class13Mapper))
+                .WithNodeTypeResolver(new Tag13Resolver()) // some users have "tag:yousandi.cn,2023:13" instead, so use a more generic approach
                 .IgnoreUnmatchedProperties()
                 .Build();
             //serializer.Settings.RegisterTagMapping("tag:unity3d.com,2011:13", typeof(Class13));
@@ -407,5 +408,22 @@ namespace Meryel.UnityCodeAssist.Editor.Input
     public class Class13Mapper
     {
         public InputManagerMapper? InputManager { get; set; }
+    }
+
+    public class Tag13Resolver : YamlDotNet.Serialization.INodeTypeResolver
+    {
+        public bool Resolve(YamlDotNet.Core.Events.NodeEvent? nodeEvent, ref Type currentType)
+        {
+            if (nodeEvent != null && !nodeEvent.Tag.IsEmpty && !nodeEvent.Tag.IsNonSpecific)
+            {
+                var tagValue = nodeEvent.Tag.Value;
+                if (tagValue.EndsWith(":13"))
+                {
+                    currentType = typeof(Class13Mapper);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

@@ -50,6 +50,162 @@ namespace Meryel.UnityCodeAssist.Editor
             }
         }
 
+        public static Synchronizer.Model.Component_Material? ToSyncModelOfComponentMaterial(this GameObject go)
+        {
+            if (!go.TryGetComponent<Renderer>(out var renderer))
+                return null;
+
+            if (!renderer)
+                return null;
+
+            var propertyNames = new List<string>();
+            var propertyIndices = new List<string>();
+            var propertyTypes = new List<int>();
+            var propertyValues = new List<string>();
+
+            var processedShaders = new HashSet<Shader>();
+
+            // most of the time, there will be a single material, so initiate with capacity of 1
+            var keywordsContainer = new List<string[]>(1);
+            var passNamesContainer = new List<string[]>(1);
+            var passIndicesContainer = new List<string[]>(1);
+
+            foreach (var material in renderer.sharedMaterials)
+            {
+                if (!material)
+                    continue;
+
+                var shader = material.shader;
+                if (!shader)
+                    continue;
+
+                if (processedShaders.Contains(shader))
+                    continue;
+                processedShaders.Add(shader);
+
+                int propertyCount = shader.GetPropertyCount();
+
+                for (int i = 0; i < propertyCount; i++)
+                {
+                    var propertyName = shader.GetPropertyName(i);
+                    var propertyId = Shader.PropertyToID(propertyName);
+
+                    if (!material.HasProperty(propertyId))
+                        continue;
+
+                    var propertyTypeRaw = shader.GetPropertyType(i);
+                    GetExtendedTypeAndValue(propertyId, propertyTypeRaw, material, out var propertyTypeExtended, out var propertyValue);
+
+                    propertyNames.Add(propertyName);
+                    propertyIndices.Add(propertyId.ToString());
+                    propertyTypes.Add((int)propertyTypeExtended);
+                    propertyValues.Add(propertyValue);
+                }
+
+                keywordsContainer.Add(shader.keywordSpace.keywordNames);
+
+                var passCount = material.passCount;
+                var passNames = new string[passCount];
+                var passIndices = new string[passCount];
+                for (int i = 0; i < passCount; i++)
+                {
+                    passNames[i] = material.GetPassName(i);
+                    passIndices[i] = i.ToString();
+                }
+                passNamesContainer.Add(passNames);
+                passIndicesContainer.Add(passIndices);
+            }
+
+            var data = new Synchronizer.Model.Component_Material
+            {
+                GameObjectId = GetId(go),
+                PropertyNames = propertyNames.ToArray(),
+                PropertyIndices = propertyIndices.ToArray(),
+                PropertyTypes = propertyTypes.ToArray(),
+                PropertyValues = propertyValues.ToArray(),
+                Keywords = ConcatenateListOfArrays(keywordsContainer),
+                PassNames = ConcatenateListOfArrays(passNamesContainer),
+                PassIndices = ConcatenateListOfArrays(passIndicesContainer),
+            };
+            return data;
+
+
+            static void GetExtendedTypeAndValue(int propertyId, UnityEngine.Rendering.ShaderPropertyType typeRaw, Material material, out Synchronizer.Model.Component_Material.MaterialPropertyType typeExtended, out string value)
+            {
+                // Handle scalar types based on shader declaration
+                switch (typeRaw)
+                {
+                    case UnityEngine.Rendering.ShaderPropertyType.Color:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Color;
+                        value = material.GetColor(propertyId).ToString();
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Vector:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Vector;
+                        value = material.GetVector(propertyId).ToString();
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Float:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Float;
+                        value = material.GetFloat(propertyId).ToString();
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Range:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Range;
+                        value = material.GetFloat(propertyId).ToString();
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Texture:
+                        {
+                            typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Texture;
+                            var texture = material.GetTexture(propertyId);
+                            if (texture)
+                                value = texture.name;
+                            else
+                                value = string.Empty;
+                        }
+                        break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Int:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Integer;
+                        value = material.GetInteger(propertyId).ToString();
+                        break;
+
+                    default:
+                        typeExtended = Synchronizer.Model.Component_Material.MaterialPropertyType.Invalid;
+                        value = string.Empty;
+                        Serilog.Log.Error("invalid material type {TypeRaw}", typeRaw);
+                        break;
+                }
+            }
+
+            static string[] ConcatenateListOfArrays(List<string[]> listOfArrays)
+            {
+                if (listOfArrays.Count == 0)
+                    return new string[0];
+                else if (listOfArrays.Count == 1)
+                    return listOfArrays[0];
+
+                int totalLength = 0;
+                foreach (var arr in listOfArrays)
+                    totalLength += arr.Length;
+
+                string[] result = new string[totalLength];
+                Span<string> span = result.AsSpan();
+
+                int offset = 0;
+                foreach (var arr in listOfArrays)
+                {
+                    arr.AsSpan().CopyTo(span.Slice(offset));
+                    offset += arr.Length;
+                }
+
+                return result;
+            }
+
+
+        }
+
         public static Synchronizer.Model.Component_Animation? ToSyncModelOfComponentAnimation(this GameObject go)
         {
             if (!go.TryGetComponent<Animation>(out var animation))
@@ -222,6 +378,9 @@ namespace Meryel.UnityCodeAssist.Editor
             transitions = new List<(AnimatorTransition, string)>();
             foreach (AnimatorControllerLayer layer in layers)
             {
+                if (layer == null || layer.stateMachine == null)
+                    continue;
+
                 ChildAnimatorState[] animStates = layer.stateMachine.states;
                 getStateMachineInfo(layer.stateMachine, 0, layer.name, states, transitions);
             }
