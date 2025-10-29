@@ -1,83 +1,67 @@
 using UnityEngine;
 using TMPro;
+using DialogueEditor;
 public class Interaction : MonoBehaviour
 {
+    [SerializeField] private NPCConversation _AntonioConversation; 
     public PlayerMovement _Player;
     public GameObject _InteractionIndicator;
     public TextMeshProUGUI _InteractionText;
-    public GameObject _DialoguePanel;
-    public TextMeshProUGUI _DialogueText;
     public bool _isInteracting;
-    public bool _isInteractingObject;
-    public bool _isDialogueActive;
+    public bool _canInteract;
+    private float _OriginalSpeed;
+
+    private void Start()
+    {
+        _OriginalSpeed = _Player.moveSpeed;
+
+        ConversationManager.OnConversationStarted += OnConversationStarted;
+        ConversationManager.OnConversationEnded   += OnConversationEnded;
+    }
+    private void OnDestroy()
+    {
+        ConversationManager.OnConversationStarted -= OnConversationStarted;
+        ConversationManager.OnConversationEnded -= OnConversationEnded;
+    }
+
+    private void Update()
+    {
+        if (_canInteract && Input.GetKeyDown(KeyCode.F))
+        {
+            ConversationManager.Instance.StartConversation(_AntonioConversation);
+            _Player.moveSpeed = 0f;
+            _isInteracting = true;
+            _InteractionIndicator.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("NPC"))                // triggers with npc interact indicator is out
+        if (other.CompareTag("Player"))
         {
             _InteractionIndicator.SetActive(true);
-            _InteractionText.text = "Talk";
-            Debug.Log("Collided with NPC");
-            _isInteracting = true;
-        }
-
-        if (other.CompareTag("Object"))             // triggers with object interact indicator is out
-        {
-            _InteractionIndicator.SetActive(true);
-            _InteractionText.text = "Inspect";
-            Debug.Log("Collided with object");
-            _isInteractingObject = true;
+            _InteractionText.text = "Interact";
+            _canInteract = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("NPC") || other.CompareTag("Object"))  // on exit trigger interact indicator is off
+        if (other.CompareTag("Player"))  // on exit trigger interact indicator is off
         {
             _InteractionIndicator.SetActive(false);
             _isInteracting = false;
-            _isInteractingObject = false;
             Debug.Log("NotColliding");
         }
     }
 
-    private void Update()
+    private void OnConversationStarted()
     {
-        if (_isInteracting && Input.GetKeyDown(KeyCode.F))  // if dialogue is on, press f to interact, dialogue panel pops out, if done talking, dialogue panel is off (subject to change when dialogur system is out)
-            
-        {
-            _isDialogueActive = !_isDialogueActive;
+        _Player.moveSpeed = 0f;
+    }
 
-            if (_isDialogueActive) 
-            {
-                _DialoguePanel.SetActive(true);
-                _DialogueText.text = "You are talking to me!";
-                _Player.moveSpeed = 0;
-            }
-            else 
-            {
-                _DialoguePanel.SetActive(false);
-                _Player.moveSpeed = 1;
-                Debug.Log("Stopped talking");
-            }
-        }
-
-        if (_isInteractingObject && Input.GetKeyDown(KeyCode.F)) // if dialogue is on, press f to interact, dialogue panel pops out, if done inspecting, dialogue panel is off (subject to change when dialogur system is out)
-        {
-            _isDialogueActive = !_isDialogueActive;
-
-            if (_isDialogueActive) 
-            {
-                _DialoguePanel.SetActive(true);
-                _DialogueText.text = ("Inspecting an Object");
-                _Player.moveSpeed = 0;
-                Debug.Log("Inspecting Object");
-            }
-            else 
-            {
-                _DialoguePanel.SetActive(false);
-                _Player.moveSpeed = 1;
-                Debug.Log("Stopped Inspecting");
-            }
-        }
+    private void OnConversationEnded()
+    {
+        _Player.moveSpeed = _OriginalSpeed;
     }
 }
