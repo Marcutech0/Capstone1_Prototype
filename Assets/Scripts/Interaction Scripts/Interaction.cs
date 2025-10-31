@@ -13,6 +13,7 @@ public class Interaction : MonoBehaviour
 
     private void Start()
     {
+        // set the orgi speed to the default speed, references the dialogue systems conversation manager
         _OriginalSpeed = _Player.moveSpeed;
 
         ConversationManager.OnConversationStarted += OnConversationStarted;
@@ -20,12 +21,14 @@ public class Interaction : MonoBehaviour
     }
     private void OnDestroy()
     {
+        // makes sure that np duplicates of dialogue's editors managers exists
         ConversationManager.OnConversationStarted -= OnConversationStarted;
         ConversationManager.OnConversationEnded -= OnConversationEnded;
     }
 
     private void Update()
     {
+        // if the player can interact press f to interact with the NPC or object
         if (_canInteract && Input.GetKeyDown(KeyCode.F))
         {
             ConversationManager.Instance.StartConversation(_AntonioConversation);
@@ -37,6 +40,7 @@ public class Interaction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // If a NPC or object detects a player, set the player's interact indicator to appear
         if (other.CompareTag("Player"))
         {
             _InteractionIndicator.SetActive(true);
@@ -57,11 +61,13 @@ public class Interaction : MonoBehaviour
 
     private void OnConversationStarted()
     {
+        // if the coversation triggers set player speed to 0
         _Player.moveSpeed = 0f;
     }
 
     private void OnConversationEnded()
     {
+        // if the conversation ended brings the player speed back to its default speed
         _Player.moveSpeed = _OriginalSpeed;
     }
 }
