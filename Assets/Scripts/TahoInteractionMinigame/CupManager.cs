@@ -20,30 +20,18 @@ public class CupManager : MonoBehaviour
 
     IEnumerator SpawnCupsOverTime()
     {
-        // Cup Spawner based on Spawner Interval
-        while (true)
+        // Spawns Cups every 2 secs on the empty spawnpoints
+        while (true) 
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
-            bool allFilled = true;
-            foreach (GameObject cup in _Cups)
+            for (int i = 0; i < _CupSpawnPoints.Length; i++) 
             {
-                if (cup == null)
+                if (_Cups[i] == null) 
                 {
-                    allFilled = false;
-                    break;
+                    SpawnCupAt(i);
                 }
             }
-            if (allFilled)
-                yield break;
-
-            int randomIndex;
-            do
-            {
-                randomIndex = Random.Range(0, _CupSpawnPoints.Length);
-            } while (_Cups[randomIndex] != null);
-
-            SpawnCupAt(randomIndex);
         }
     }
 
@@ -70,28 +58,28 @@ public class CupClickManager : MonoBehaviour, IPointerClickHandler
 {
     [HideInInspector] public int _Index; 
     [HideInInspector] public TextMeshProUGUI _SelectedCupText; 
-    [HideInInspector] public TextMeshProUGUI fillPercentText;   
+    [HideInInspector] public TextMeshProUGUI _FillPercentText;   
 
-    public static CupData currentlySelectedCup = null;
+    public static CupData _CurrentlySelectedCup = null;
 
-    private CupData cupData;
+    private CupData _CupData;
 
     void Awake()
     {
         // refereced the cup data script on start up on the game
-        cupData = GetComponent<CupData>();
+        _CupData = GetComponent<CupData>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         // currently selected cup by the player is displayed via text, the cups number will be based on it's index in the array, with it;s fill percent text updated based on it's currently stored fill amount data
-        currentlySelectedCup = cupData;
+        _CurrentlySelectedCup = _CupData;
 
         if (_SelectedCupText != null)
             _SelectedCupText.text = $"Selected Cup: {_Index}";
 
-        if (fillPercentText != null)
-            fillPercentText.text = $"{cupData._FillPercent:0}%";
+        if (_FillPercentText != null)
+            _FillPercentText.text = $"{_CupData._FillPercent:0}%";
     }
 }
 
