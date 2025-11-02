@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.UI;
+using System.Linq;
 
 
 public class TransitionScript : MonoBehaviour
@@ -16,6 +17,11 @@ public class TransitionScript : MonoBehaviour
 
     #region Notebook Transition
     [SerializeField] private Animator notebookAnimator;
+
+    #endregion
+
+    #region Text Fragment 
+    [SerializeField] private TMP_Text[] textFragmentDisplay;
 
     #endregion
 
@@ -42,6 +48,10 @@ public class TransitionScript : MonoBehaviour
         textDisplay.alpha = 0f;
 
         notebookAnimator.SetTrigger("Show"); //Notebook transition after text display
+
+        textFragmentDisplay.ToList().ForEach(textFragment => textFragment.alpha = 1f); //Reveals text fragments
+
+
     }
     IEnumerator TypeText(string fulltext)
     {
