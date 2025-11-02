@@ -2,8 +2,7 @@
 - Project name: Capstone1_Prototype
 - Unity version: Unity 6000.2.9f1
 - Active game object:
-  - Name: Notepad Image
-  - Name: MinigameManager
+  - Name: DialogueManager
   - Tag: Untagged
-  - Layer: UI
+  - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
