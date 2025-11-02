@@ -29,16 +29,19 @@ public class MinigameManager : MonoBehaviour
 
     public void Awake()
     {
+         // set the instance to this Manager
         _Instance = this;
     }
 
     public void Start()
     {
+        // starts minigame
         StartCoroutine(StartMinigame());
     }
 
     IEnumerator StartMinigame()
     {
+         // while minigame starts remaining time ticks down based on the given duration, if over fill count is 3 or remaining time is below 0, game over
         _RemainingTime = _GameDuration;
         _GameActive = true;
 
@@ -63,6 +66,7 @@ public class MinigameManager : MonoBehaviour
 
     IEnumerator SpillRoutine()
     {
+        // during minigame spill the currently selected cup based on random spill amount with respect to time to spill 
         while (_GameActive)
         {
             float _WaitTime = Random.Range(_MinSpillDelay, _MaxSpillDelay);
@@ -94,6 +98,7 @@ public class MinigameManager : MonoBehaviour
 
     public void EndMiniGame() 
     {
+        // lose win conditions
         _GameActive = false;
         if (_OverfillManager._OverfillCount >= 3)
         {
@@ -109,6 +114,7 @@ public class MinigameManager : MonoBehaviour
     }
     public bool _IsGameActive() 
     {
+        // if active return minigame is active
         return _GameActive;
     }
 }
