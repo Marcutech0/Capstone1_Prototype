@@ -7,6 +7,10 @@ TagManager:
   - NPC
   - Object
   - TahoMinigame
+  - Desk
+  - Mirror
+  - Phone
+  - RayaDorm
   layers:
   - Default
   - TransparentFX
