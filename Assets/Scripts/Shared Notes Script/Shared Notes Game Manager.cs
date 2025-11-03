@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class Shared_Notes_Manager : MonoBehaviour
 {
     [SerializeField] private GameObject text_fragmentPrefab;
     [SerializeField] private RectTransform text_fragmentParent;
