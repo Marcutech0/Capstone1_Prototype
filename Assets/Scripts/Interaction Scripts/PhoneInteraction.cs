@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Video;
 public class PhoneInteraction : MonoBehaviour
-{
+{ 
     [Header("UI")]
     public GameObject _DialoguePanel;
     public GameObject _InteractIndicator;
@@ -12,8 +12,8 @@ public class PhoneInteraction : MonoBehaviour
     public TextMeshProUGUI _StoryText; // no story to write
     public TextMeshProUGUI _InteractText;
 
+    public GameFlowLegendManager _LegendManager;
     [TextArea] public string _Storyline;
-    public GameFlowLegendManager _LegendTracker;
     public CharacterController _PlayerController;
     public PlayerMovement _PlayerControls;
     public bool _IsInRange;
@@ -35,29 +35,35 @@ public class PhoneInteraction : MonoBehaviour
 
     public void Choice1Dorm() 
     {
-        _LegendTracker._ReputationCount++;
-        _LegendTracker._ReputationText.text = "Reputation: " + _LegendTracker._ReputationCount;
-        _LegendTracker._Reputation.SetActive(true);
+        _LegendManager._ReputationCount++;
+        _LegendManager._ReputationText.text = "Reputation: " + _LegendManager._ReputationCount;
+        _LegendManager._Reputation.SetActive(true);
+        PlayerPrefs.SetInt("Reputation Count", _LegendManager._ReputationCount);
+        PlayerPrefs.Save();
 
-        StartCoroutine(CloseDialogueAndChoicePanel(2f));
+        StartCoroutine(CloseDialogueAndChoicePanel(1f));
     }
 
     public void Choice2Dorm() 
     {
-        _LegendTracker._GuiltCount++;
-        _LegendTracker._GuiltText.text = "Guilt: " + _LegendTracker._GuiltCount;
-        _LegendTracker._Guilt.SetActive(true);
+        _LegendManager._GuiltCount++;
+        _LegendManager._GuiltText.text = "Guilt: " + _LegendManager._GuiltCount;
+        _LegendManager._Guilt.SetActive(true);
+        PlayerPrefs.SetInt("Guilt Count", _LegendManager._GuiltCount);
+        PlayerPrefs.Save();
 
-        StartCoroutine(CloseDialogueAndChoicePanel(2f));
+        StartCoroutine(CloseDialogueAndChoicePanel(1f));
     }
 
     public void Choice3Dorm() 
     {
-        _LegendTracker._AnonymityCount++;
-        _LegendTracker._AnonymityText.text = "Anonymity: " + _LegendTracker._AnonymityCount;
-        _LegendTracker._Anonymity.SetActive(true);
+        _LegendManager._AnonymityCount++;
+        _LegendManager._AnonymityText.text = "Anonymity: " + _LegendManager._AnonymityCount;
+        _LegendManager._Anonymity.SetActive(true);
+        PlayerPrefs.SetInt("Anonymity Count", _LegendManager._AnonymityCount);
+        PlayerPrefs.Save();
 
-        StartCoroutine(CloseDialogueAndChoicePanel(2f));
+        StartCoroutine(CloseDialogueAndChoicePanel(1f));
 
     }
 
@@ -67,9 +73,9 @@ public class PhoneInteraction : MonoBehaviour
 
         _DialoguePanel.SetActive(false);
         _ChoicePanel.SetActive(false);
-        _LegendTracker._Reputation.SetActive(false);
-        _LegendTracker._Guilt.SetActive(false);
-        _LegendTracker._Anonymity.SetActive(false);
+        _LegendManager._Reputation.SetActive(false);
+        _LegendManager._Guilt.SetActive(false);
+        _LegendManager._Anonymity.SetActive(false);
 
         _PlayerController.enabled = true;
         _PlayerControls.enabled = true;

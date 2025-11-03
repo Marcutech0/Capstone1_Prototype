@@ -36,6 +36,36 @@ public class GameFlowLegendManager : MonoBehaviour
         */
     }
 
+    public void Awake()
+    {
+        // testing purposes
+        //PlayerPrefs.DeleteAll();
+        //PlayerPrefs.Save();
+        //Debug.Log("Player Int Legend count resetted!");
+
+        _CourageCount = PlayerPrefs.GetInt("Courage Count", 0);
+        _FearCount = PlayerPrefs.GetInt("Fear Count", 0);
+        _ReputationCount = PlayerPrefs.GetInt("Reputation Count", 0);
+        _AnonymityCount = PlayerPrefs.GetInt("Anonymity Count", 0);
+        _GuiltCount = PlayerPrefs.GetInt("Guilt Count", 0);
+
+        if (_CourageText != null)
+            _CourageText.text = "Courage: " + _CourageCount;
+
+        if (_FearText != null)
+            _FearText.text = "Fear:" + _FearCount;
+
+        if (_ReputationText != null)
+            _ReputationText.text = "Reputation: " + _ReputationCount;
+
+        if (_AnonymityText != null)
+            _AnonymityText.text = "Anonymity" + _AnonymityCount;
+
+        if (_GuiltText != null)
+            _GuiltText.text = "Guilt: " + _GuiltCount;
+
+    }
+
     public void OnVideoEnd(VideoPlayer cs1) 
     {
         /*

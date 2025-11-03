@@ -14,11 +14,12 @@ public class RayaInteractionDorem : MonoBehaviour
     public TextMeshProUGUI _InteractText;
 
     [TextArea] public string _Storyline;
-    public GameFlowLegendManager _LegendTracker;
     public CharacterController _PlayerController;
     public PlayerMovement _PlayerControls;
     public bool _IsInRange;
     public bool _HasInteracted;
+
+    public GameFlowLegendManager _LegendManager;
 
     public void Update()
     {
@@ -74,12 +75,12 @@ public class RayaInteractionDorem : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _DialoguePanel.SetActive(false);
         _Choice3Panel.SetActive(false);
-        _LegendTracker._Reputation.SetActive(false);
-        _LegendTracker._Guilt.SetActive(false);
-        _LegendTracker._Courage.SetActive(false);
-        _LegendTracker._Fear.SetActive(false);
-        _LegendTracker._Courage.SetActive(false);
-        _LegendTracker._Guilt.SetActive(false);
+        _LegendManager._Reputation.SetActive(false);
+        _LegendManager._Guilt.SetActive(false);
+        _LegendManager._Courage.SetActive(false);
+        _LegendManager._Fear.SetActive(false);
+        _LegendManager._Courage.SetActive(false);
+        _LegendManager._Guilt.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("CampusHall");
@@ -87,50 +88,62 @@ public class RayaInteractionDorem : MonoBehaviour
 
     public void Choice4Dorm() 
     {
-        _LegendTracker._ReputationCount++;
-        _LegendTracker._ReputationText.text = "Reputation: " + _LegendTracker._ReputationCount;
-        _LegendTracker._Reputation.SetActive(true);
+        _LegendManager._ReputationCount++;
+        _LegendManager._ReputationText.text = "Reputation: " + _LegendManager._ReputationCount;
+        _LegendManager._Reputation.SetActive(true);
+        PlayerPrefs.SetInt("Reputation Count", _LegendManager._ReputationCount);
+        PlayerPrefs.Save();
         _Choice2Panel.SetActive(false);
         StartCoroutine(ShowNewDialogueText("Can we talk later? Just us."));
     }
 
     public void Choice5Dorm() 
     {
-        _LegendTracker._GuiltCount++;
-        _LegendTracker._GuiltText.text = "Guilt: " + _LegendTracker._GuiltCount;
-        _LegendTracker._Guilt.SetActive(true);
+        _LegendManager._GuiltCount++;
+        _LegendManager._GuiltText.text = "Guilt: " + _LegendManager._GuiltCount;
+        _LegendManager._Guilt.SetActive(true);
+        PlayerPrefs.SetInt("Guilt Count", _LegendManager._GuiltCount);
+        PlayerPrefs.Save();
         _Choice2Panel.SetActive(false);
         StartCoroutine(ShowNewDialogueText("Can we talk later? Just us."));
     }
 
     public void Choice6Dorm() 
     {
-        _LegendTracker._CourageCount++;
-        _LegendTracker._CourageText.text = "Courage: " + _LegendTracker._CourageCount;
-        _LegendTracker._Courage.SetActive(true);
+        _LegendManager._CourageCount++;
+        _LegendManager._CourageText.text = "Courage: " + _LegendManager._CourageCount;
+        _LegendManager._Courage.SetActive(true);
+        PlayerPrefs.SetInt("Courage Count", _LegendManager._CourageCount);
+        PlayerPrefs.Save();
         _Choice2Panel.SetActive(false);
         StartCoroutine(ShowNewDialogueText("Can we talk later? Just us."));
     }
 
     public void Choice7Dorm()
     {
-        _LegendTracker._FearCount++;
-        _LegendTracker._FearText.text = "Fear: " + _LegendTracker._FearCount;
-        _LegendTracker._Fear.SetActive(true);
+        _LegendManager._FearCount++;
+        _LegendManager._FearText.text = "Fear: " + _LegendManager._FearCount;
+        _LegendManager._Fear.SetActive(true);
+        PlayerPrefs.SetInt("Fear Count", _LegendManager._FearCount);
+        PlayerPrefs.Save();
         StartCoroutine(EndDialogueLoadScene());
     }
     public void Choice8Dorm()
     {
-        _LegendTracker._CourageCount++;
-        _LegendTracker._CourageText.text = "Courage: " + _LegendTracker._CourageCount;
-        _LegendTracker._Courage.SetActive(true);
+        _LegendManager._CourageCount++;
+        _LegendManager._CourageText.text = "Courage: " + _LegendManager._CourageCount;
+        _LegendManager._Courage.SetActive(true);
+        PlayerPrefs.SetInt("Courage Count", _LegendManager._CourageCount);
+        PlayerPrefs.Save();
         StartCoroutine(EndDialogueLoadScene());
     }
     public void Choice9Dorm()
     {
-        _LegendTracker._GuiltCount++;
-        _LegendTracker._GuiltText.text = "Guilt: " + _LegendTracker._GuiltCount;
-        _LegendTracker._Guilt.SetActive(true);
+        _LegendManager._GuiltCount++;
+        _LegendManager._GuiltText.text = "Guilt: " + _LegendManager._GuiltCount;
+        _LegendManager._Guilt.SetActive(true);
+        PlayerPrefs.SetInt("Guilt Count", _LegendManager._GuiltCount);
+        PlayerPrefs.Save();
         StartCoroutine(EndDialogueLoadScene());
     }
 

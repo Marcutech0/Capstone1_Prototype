@@ -511,7 +511,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 129593258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fea73633815267042b48f34c3116d639, type: 3}
+  m_Script: {fileID: 11500000, guid: 306eedc82803da640b4b84ee1c68aac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _CourageCount: 0
@@ -521,7 +521,7 @@ MonoBehaviour:
   _GuiltCount: 0
   _CutscenePanel: {fileID: 1148274847}
   _Cutscene1: {fileID: 1202278921}
-  _Cutscene2: {fileID: 0}
+  _Cutscene2: {fileID: 214883210}
   _Courage: {fileID: 422472580}
   _Fear: {fileID: 518691572}
   _Reputation: {fileID: 1590302710}
@@ -3458,8 +3458,8 @@ MonoBehaviour:
   _NpcName: {fileID: 1585660187}
   _StoryText: {fileID: 426961219}
   _InteractText: {fileID: 2018770461}
+  _LegendManager: {fileID: 129593260}
   _Storyline: 
-  _LegendTracker: {fileID: 129593260}
   _PlayerController: {fileID: 801057272}
   _PlayerControls: {fileID: 801057271}
   _IsInRange: 0
@@ -3484,11 +3484,11 @@ MonoBehaviour:
   _StoryText: {fileID: 426961219}
   _InteractText: {fileID: 2018770461}
   _Storyline: Liam, you look like you slept three hours.
-  _LegendTracker: {fileID: 129593260}
   _PlayerController: {fileID: 801057272}
   _PlayerControls: {fileID: 801057271}
   _IsInRange: 0
   _HasInteracted: 0
+  _LegendManager: {fileID: 129593260}
 --- !u!1 &962218582
 GameObject:
   m_ObjectHideFlags: 0
