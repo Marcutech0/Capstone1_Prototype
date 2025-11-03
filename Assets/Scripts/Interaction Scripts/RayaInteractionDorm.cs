@@ -1,12 +1,14 @@
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 public class RayaInteractionDorem : MonoBehaviour
 {
     [Header("UI")]
     public GameObject _DialoguePanel;
     public GameObject _InteractIndicator;
     public GameObject _Choice2Panel;
+    public GameObject _Choice3Panel;
     public TextMeshProUGUI _NpcName; 
     public TextMeshProUGUI _StoryText;
     public TextMeshProUGUI _InteractText;
@@ -48,6 +50,7 @@ public class RayaInteractionDorem : MonoBehaviour
         {
             _Choice2Panel.SetActive(true);
         }
+
     }
 
     IEnumerator ShowNewDialogueText(string _NewLine) 
@@ -59,6 +62,27 @@ public class RayaInteractionDorem : MonoBehaviour
             _StoryText.text += c;
             yield return new WaitForSeconds(0.03f);
         }
+
+        if (_StoryText.text == _NewLine) 
+        {
+            _Choice3Panel.SetActive(true);
+        }
+    }
+
+    IEnumerator EndDialogueLoadScene() 
+    {
+        yield return new WaitForSeconds(1f);
+        _DialoguePanel.SetActive(false);
+        _Choice3Panel.SetActive(false);
+        _LegendTracker._Reputation.SetActive(false);
+        _LegendTracker._Guilt.SetActive(false);
+        _LegendTracker._Courage.SetActive(false);
+        _LegendTracker._Fear.SetActive(false);
+        _LegendTracker._Courage.SetActive(false);
+        _LegendTracker._Guilt.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene("CampusHall");
     }
 
     public void Choice4Dorm() 
@@ -72,13 +96,44 @@ public class RayaInteractionDorem : MonoBehaviour
 
     public void Choice5Dorm() 
     {
-    
+        _LegendTracker._GuiltCount++;
+        _LegendTracker._GuiltText.text = "Guilt: " + _LegendTracker._GuiltCount;
+        _LegendTracker._Guilt.SetActive(true);
+        _Choice2Panel.SetActive(false);
+        StartCoroutine(ShowNewDialogueText("Can we talk later? Just us."));
     }
 
     public void Choice6Dorm() 
     {
-        
+        _LegendTracker._CourageCount++;
+        _LegendTracker._CourageText.text = "Courage: " + _LegendTracker._CourageCount;
+        _LegendTracker._Courage.SetActive(true);
+        _Choice2Panel.SetActive(false);
+        StartCoroutine(ShowNewDialogueText("Can we talk later? Just us."));
     }
+
+    public void Choice7Dorm()
+    {
+        _LegendTracker._FearCount++;
+        _LegendTracker._FearText.text = "Fear: " + _LegendTracker._FearCount;
+        _LegendTracker._Fear.SetActive(true);
+        StartCoroutine(EndDialogueLoadScene());
+    }
+    public void Choice8Dorm()
+    {
+        _LegendTracker._CourageCount++;
+        _LegendTracker._CourageText.text = "Courage: " + _LegendTracker._CourageCount;
+        _LegendTracker._Courage.SetActive(true);
+        StartCoroutine(EndDialogueLoadScene());
+    }
+    public void Choice9Dorm()
+    {
+        _LegendTracker._GuiltCount++;
+        _LegendTracker._GuiltText.text = "Guilt: " + _LegendTracker._GuiltCount;
+        _LegendTracker._Guilt.SetActive(true);
+        StartCoroutine(EndDialogueLoadScene());
+    }
+
 
 
     public void OnTriggerEnter(Collider other)
