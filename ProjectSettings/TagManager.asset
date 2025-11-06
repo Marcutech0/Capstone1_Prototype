@@ -11,6 +11,12 @@ TagManager:
   - Mirror
   - Phone
   - RayaDorm
+  - PoliticsFolder
+  - CultureFolder
+  - EducationFolder
+  - Politics
+  - Education
+  - Culture
   layers:
   - Default
   - TransparentFX
