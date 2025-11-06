@@ -9646,7 +9646,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
@@ -9962,9 +9962,9 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2047362174}
   - {fileID: 1541999645}
   - {fileID: 164088394}
-  - {fileID: 2047362174}
   - {fileID: 139226741}
   - {fileID: 433403473}
   - {fileID: 1608520393}
