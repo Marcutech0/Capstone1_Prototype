@@ -10,8 +10,8 @@ public class EducationFolder : MonoBehaviour
 
     private void Awake()
     {
-        if (gameObject.tag != "CultureFolder")
-            gameObject.tag = "CultureFolder";
+        if (gameObject.tag != "EducationFolder")
+            gameObject.tag = "EducationFolder";
     }
 
     public void CheckDrop(GameObject draggedObject)

@@ -1,58 +1,87 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.WSA;
+
 public class DraggingText : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField ]private RectTransform _TextTransform;
-    [SerializeField] private Canvas _MinigameScreen;
+    [SerializeField] private RectTransform _TextTransform;
+    public Canvas _MinigameScreen;
+    public ResearchTitleSpawner _Spawner; 
+
     private void Awake()
     {
         _TextTransform = GetComponent<RectTransform>();
     }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("Pointer down on " + gameObject.name);
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
+        Debug.Log("Begin dragging " + gameObject.name);
     }
+
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
         _TextTransform.anchoredPosition += eventData.delta / _MinigameScreen.scaleFactor;
     }
+
     public void OnEndDrag(PointerEventData eventData)
     {
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
-
-        foreach (RaycastResult result in results)
+        List<RaycastResult> _Results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, _Results);
+        foreach (RaycastResult _Result in _Results)
         {
-            if (result.gameObject.GetComponent<PoliticsFolder>() != null)
+            var _Politics = _Result.gameObject.GetComponent<PoliticsFolder>();
+            var _Culture = _Result.gameObject.GetComponent<CultureFolder>();
+            var _Education = _Result.gameObject.GetComponent<EducationFolder>();
+            if (_Politics != null)
             {
-                transform.SetParent(result.gameObject.transform);
-                transform.localPosition = Vector3.zero;
-                gameObject.SetActive(false);
-                break;
+                CheckTextTagAndScore("Politics");
+                PlaceInFolder(_Politics.transform);
+                return;
             }
-            else if (result.gameObject.GetComponent<CultureFolder>() != null)
+
+            if (_Culture != null)
             {
-                transform.SetParent(result.gameObject.transform);
-                transform.localPosition = Vector3.zero;
-                gameObject.SetActive(false);
-                break;
+                CheckTextTagAndScore("Culture");
+                PlaceInFolder(_Culture.transform);
+                return;
             }
-            else if (result.gameObject.GetComponent<EducationFolder>() != null)
+
+            if (_Education != null)
             {
-                transform.SetParent(result.gameObject.transform);
-                transform.localPosition = Vector3.zero;
-                gameObject.SetActive(false);
-                break;
+                CheckTextTagAndScore("Education");
+                PlaceInFolder(_Education.transform);
+                return;
             }
         }
     }
-    public void OnPointerDown(PointerEventData eventData) 
+
+    private void PlaceInFolder(Transform _Folder)
     {
-        Debug.Log("OnPointerDown");
+        Debug.Log($"Dropped {gameObject.name} on {_Folder.name}");
+        transform.SetParent(_Folder);
+        transform.localPosition = Vector3.zero;
+        gameObject.SetActive(false);
+        _Spawner?.OnTitlePlaced(gameObject);
+    }
+
+    private void CheckTextTagAndScore(string _FolderType)
+    {
+        Timer _Timer = FindAnyObjectByType<Timer>();
+        if (_Timer == null) return;
+
+        // Compare the tag of the text with folder type
+        if (gameObject.CompareTag(_FolderType))
+        {
+            _Timer.AddCorrectPoints();
+        }
+        else
+        {
+            _Timer.AddWrongPoints();
+        }
     }
 }

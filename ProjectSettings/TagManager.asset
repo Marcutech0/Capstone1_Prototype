@@ -17,6 +17,7 @@ TagManager:
   - Politics
   - Education
   - Culture
+  - Title
   layers:
   - Default
   - TransparentFX
