@@ -20,6 +20,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CampusHall.unity
     guid: 70b39f06ffb50264cb19b2db943778e9
+  - enabled: 1
+    path: Assets/Scenes/Research Panic.unity
+    guid: 70dfbc2c8c877064c8be4d9142c058fe
+  - enabled: 1
+    path: Assets/Scenes/Shared Notes.unity
+    guid: a9b1351654a94ec489333784d6f3853f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -6,6 +6,7 @@
   - Name: PlayerObject
   - Tag: Player
   - Name: Game Manager
+  - Name: MinigameManager
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

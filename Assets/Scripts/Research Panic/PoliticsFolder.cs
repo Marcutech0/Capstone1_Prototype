@@ -9,8 +9,8 @@ public class PoliticsFolder : MonoBehaviour
 
     private void Awake()
     {
-        if (gameObject.tag != "CultureFolder")
-            gameObject.tag = "CultureFolder";
+        if (gameObject.tag != "PoliticsFolder")
+            gameObject.tag = "PoliticsFolder";
     }
 
     public void CheckDrop(GameObject draggedObject)
