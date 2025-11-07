@@ -17,7 +17,7 @@ public class TransitionScript : MonoBehaviour
 
     #region Notebook Transition
     [SerializeField] private Animator notebookAnimator;
-
+    [SerializeField] private Shared_Notes_Manager sharedNotesManager;
     #endregion
 
     #region Text Fragment 
@@ -25,10 +25,23 @@ public class TransitionScript : MonoBehaviour
 
     #endregion
 
+    [SerializeField] private int notebookAnimatorLayer = 0;
+    [SerializeField] private float notebookAnimationTimeout = 8f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (textFragmentDisplay != null)
+        {
+            foreach (TMP_Text fragment in textFragmentDisplay)
+            {
+                if (fragment != null)
+                {
+                    fragment.alpha = 0f;
+                }
+            }
+        }
+
+        sharedNotesManager?.HideUnplacedFragments();
         StartCoroutine(PlayLectureTopic());
     }
 
@@ -43,14 +56,16 @@ public class TransitionScript : MonoBehaviour
 
             yield return StartCoroutine(EraseText());
 
-            textDisplay.alpha = 1f; 
+            textDisplay.alpha = 1f;
         }
         textDisplay.alpha = 0f;
 
-        notebookAnimator.SetTrigger("Show"); //Notebook transition after text display
+        notebookAnimator.SetTrigger("Show"); //Notebook transition after text displays
 
+        yield return StartCoroutine(WaitForNotebookAnimation());
+
+        sharedNotesManager?.ShowUnplacedFragments();
         textFragmentDisplay.ToList().ForEach(textFragment => textFragment.alpha = 1f); //Reveals text fragments
-
 
     }
     IEnumerator TypeText(string fulltext)
@@ -75,5 +90,53 @@ public class TransitionScript : MonoBehaviour
     }
     #endregion
 
+    IEnumerator WaitForNotebookAnimation()
+    {
+        if (notebookAnimator == null)
+            yield break;
+
+        float elapsed = 0f;
+
+        // Allow animator to process trigger
+        yield return null;
+
+        while (notebookAnimator.IsInTransition(notebookAnimatorLayer))
+        {
+            if (AdvanceAnimationTimer(ref elapsed))
+                yield break;
+            yield return null;
+        }
+
+        AnimatorStateInfo stateInfo = notebookAnimator.GetCurrentAnimatorStateInfo(notebookAnimatorLayer);
+
+        while (stateInfo.normalizedTime < 1f)
+        {
+            if (AdvanceAnimationTimer(ref elapsed))
+                yield break;
+
+            yield return null;
+
+            if (notebookAnimator.IsInTransition(notebookAnimatorLayer))
+            {
+                while (notebookAnimator.IsInTransition(notebookAnimatorLayer))
+                {
+                    if (AdvanceAnimationTimer(ref elapsed))
+                        yield break;
+                    yield return null;
+                }
+            }
+
+            stateInfo = notebookAnimator.GetCurrentAnimatorStateInfo(notebookAnimatorLayer);
+        }
+    }
+
+    private bool AdvanceAnimationTimer(ref float elapsed)
+    {
+        if (notebookAnimationTimeout <= 0f)
+            return false;
+
+        elapsed += Time.deltaTime;
+        return elapsed >= notebookAnimationTimeout;
+    }
 
 }

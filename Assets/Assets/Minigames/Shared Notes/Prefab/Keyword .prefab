@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8529425459206681154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 326, y: 61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5215731748716026457
 CanvasRenderer:
@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901788
-  m_fontColor: {r: 0.11137152, g: 0, b: 1, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,10 +92,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54.4
-  m_fontSizeBase: 24
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 8998885407786149541}
   - component: {fileID: 1563979257921215020}
   - component: {fileID: 8804225320762678258}
+  - component: {fileID: 4880622111120182278}
   m_Layer: 5
   m_Name: 'Keyword '
   m_TagString: Untagged
@@ -163,7 +164,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7327779927008810999}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -173,7 +174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -185.38074, y: 332.84668}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 326.3799, y: 60.8123}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4863887195953725077
@@ -197,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -274,3 +275,17 @@ MonoBehaviour:
   isCorrect: 0
   textCompo: {fileID: 5905102908040824846}
   button: {fileID: 1563979257921215020}
+--- !u!114 &4880622111120182278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7327779927008810999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c226d44724822c440893d38e8032e622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingEffect
+  bob_amplify: 5
+  bob_frequency: 1

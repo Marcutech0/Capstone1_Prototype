@@ -4,5 +4,7 @@
 - Active game object:
   - Name: PlayerObject
   - Tag: Player
+  - Name: Game Manager
+  - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
