@@ -1361,6 +1361,7 @@ MonoBehaviour:
   eraseDelay: 1.5
   eraseDuration: 4
   notebookAnimator: {fileID: 108469156}
+  sharedNotesManager: {fileID: 2044058518}
   textFragmentDisplay:
   - {fileID: 302312186}
   - {fileID: 1465592371}
@@ -1372,6 +1373,8 @@ MonoBehaviour:
   - {fileID: 1527372914}
   - {fileID: 284562095}
   - {fileID: 641062170}
+  notebookAnimatorLayer: 0
+  notebookAnimationTimeout: 0.5
 --- !u!1 &471842762
 GameObject:
   m_ObjectHideFlags: 0
@@ -4290,6 +4293,7 @@ MonoBehaviour:
   - Keyword 9
   - Keyword 10
   - Keyword 4
+  hideFragmentsOnStart: 1
 --- !u!1 &2101118509
 GameObject:
   m_ObjectHideFlags: 0

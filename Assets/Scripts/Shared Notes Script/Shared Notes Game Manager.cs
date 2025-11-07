@@ -13,8 +13,11 @@ public class Shared_Notes_Manager : MonoBehaviour
     [SerializeField] private string[] text_inFragments;
     [SerializeField] private string[] right_answers;
 
+    [SerializeField] private bool hideFragmentsOnStart = true;
+
     private List<GameObject> activefragments = new List<GameObject>();
     private List<RectTransform> fragmentRectTransforms = new List<RectTransform>();
+    private List<TextFragment> fragmentComponents = new List<TextFragment>();
     private List<Vector2> startPos = new List<Vector2>();
     private List<float> offsets = new List<float>();
     private List<bool> isPlacedInNotebook = new List<bool>(); // NEW: Track placed fragments
@@ -48,6 +51,11 @@ public class Shared_Notes_Manager : MonoBehaviour
         }
 
         SpawnKeywords();
+
+        if (hideFragmentsOnStart)
+        {
+            HideUnplacedFragments();
+        }
     }
 
     void Update()
@@ -108,10 +116,17 @@ public class Shared_Notes_Manager : MonoBehaviour
             int index = activefragments.Count;
             activefragments.Add(fragment);
             fragmentRectTransforms.Add(rt);
+            fragmentComponents.Add(text_Fragment);
             startPos.Add(position);
             offsets.Add(0f);
             isPlacedInNotebook.Add(false); // NEW: Initialize as not placed
             fragment_to_Index[text_Fragment] = index;
+
+            if (hideFragmentsOnStart)
+            {
+                fragment.SetActive(false);
+                text_Fragment.SetInteractable(false);
+            }
         }
     }
 
@@ -144,6 +159,47 @@ public class Shared_Notes_Manager : MonoBehaviour
         {
             StartCoroutine(MoveToNotebook(fragmentObj, fragment_to_Index, frag, index, notebookSlots[nextNotebookSlotIndex]));
             nextNotebookSlotIndex++;
+        }
+    }
+
+    public void ShowUnplacedFragments()
+    {
+        SetFragmentsVisible(true);
+    }
+
+    public void HideUnplacedFragments()
+    {
+        SetFragmentsVisible(false);
+    }
+
+    private void SetFragmentsVisible(bool visible)
+    {
+        for (int i = 0; i < activefragments.Count; i++)
+        {
+            if (isPlacedInNotebook[i])
+                continue;
+
+            GameObject fragmentObj = activefragments[i];
+            TextFragment fragmentComponent = fragmentComponents[i];
+
+            if (visible)
+            {
+                if (fragmentObj != null)
+                {
+                    fragmentObj.SetActive(true);
+                }
+
+                fragmentComponent?.SetInteractable(true);
+            }
+            else
+            {
+                fragmentComponent?.SetInteractable(false);
+
+                if (fragmentObj != null)
+                {
+                    fragmentObj.SetActive(false);
+                }
+            }
         }
     }
 
