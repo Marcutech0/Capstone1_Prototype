@@ -10,22 +10,31 @@ public class TextFragment : MonoBehaviour
     [SerializeField] TMP_Text textCompo;
     [SerializeField] Button button;
 
+    private System.Action<TextFragment> clickCallback;
+
     public int Index { get; set; }
+
     public void Initialize(string text, bool correct, System.Action<TextFragment> onClickCallback)
     {
         fragmentText = text;
         isCorrect = correct;
         textCompo.text = fragmentText;
 
+        clickCallback = onClickCallback;
+
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => onClickCallback(this));
+        button.onClick.AddListener(HandleClick);
+        button.interactable = true;
+    }
+
+    private void HandleClick()
+    {
+        clickCallback?.Invoke(this);
     }
 
     public void SetInteractable(bool interactable)
     {
         button.interactable = interactable;
-        if (!interactable)
-            button.onClick.RemoveAllListeners();
     }
 
 }
